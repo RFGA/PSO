@@ -1,11 +1,6 @@
 import numpy as np
 import random
 
-# inertia
-W = None
-c1 = 0.8
-c2 = 0.9
-
 
 class Particle(object):
     # pbest is the fitness of particle
@@ -25,7 +20,7 @@ class Particle(object):
         self.p_best_position = self.position
 
     def __str__(self):
-        print("Estou em:  ", self.position, " e meu pbest é: ", self.p_best_position)
+        print("Estou em:  ", self.position, " e pbest está: ", self.p_best_position)
 
     def move(self):
         self.position = self.position + self.velocity
@@ -47,16 +42,15 @@ class Space:
     def print_particles(self):
         for particle in self.particles:
             particle.__str__()
-        print("\n")
+        # print("\n")
 
     @staticmethod
     def fitness_function_sphere(particle: Particle) -> float:
         fitness = 0
         for x in particle.position:
-            # fitness += (x ** 2)
-            fitness += (x ** 2) +
-        #return fitness
-        return particle.position ** 2 + particle.position ** 2 + 1
+            fitness += (x ** 2)
+        return fitness
+        # return particle.position[0] ** 2 + particle.position[1] ** 2 + 1
 
     def set_p_best(self):
         for particle in self.particles:
@@ -82,7 +76,7 @@ class Space:
             e2 = random.random()
             v0 = particle.velocity
 
-            f_velocity = v0 + c1 * e1 * (particle.p_best_position - particle.position) + c2 * e2 * \
+            f_velocity = W * v0 + c1 * e1 * (particle.p_best_position - particle.position) + c2 * e2 * \
                 (self.g_best_position - particle.position)
             particle.velocity = f_velocity
             particle.move()
@@ -91,16 +85,24 @@ class Space:
 n_particles = int(input("Qtd. partículas: "))
 n_dimensions = int(input("Qtd. dimensões: "))
 n_iterations = int(input("Qtd. iterações: "))
-c = float(input("Valor para as constantes c1 e c2: "))
+
+c1 = c2 = float(input("Valor para as constantes c1 e c2: "))
+W = float(input("Valor para coeficiente de inércia W: "))
 
 particles = [Particle(n_dimensions) for _ in range(n_particles)]
 space = Space(n_dimensions, particles)
+
+with open('g_best_results.txt', 'a') as file:
+    result = file.write('g_best   iteration_n'+"\n")
 
 iterations = 0
 while iterations < n_iterations:
     space.move_particle()
     space.set_p_best()
     space.set_g_best()
+
+    with open('g_best_results.txt', 'a') as file:
+        result = file.write(str(space.g_best_value) + " " + str(iterations)+"\n")
 
     space.print_particles()
     iterations += 1
