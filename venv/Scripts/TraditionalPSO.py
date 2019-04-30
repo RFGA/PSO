@@ -14,27 +14,19 @@ class Particle(object):
 
         self.c1 = c1
         self.c2 = c2
-
-        # self.velocity = np.array([0] * qtd_dimension)
         self.velocity = np.zeros(qtd_dimension, int)
 
         self.position = []
         for d in range(qtd_dimension):
-            # self.position.append(random.uniform(-100, 100))
             self.position = np.insert(self.position, d, random.uniform(self.boot_interval[0], self.boot_interval[1]))
 
         self.p_best_position = self.position
         # The value in the current position of p_best
-        # self.p_best_value = Space.fitness_function_sphere(self.position)
 
         self.p_best_value = self.fit_func(self.position)
 
-
         # self.p_best_value = float('inf')
         self.p_best_historic = []
-
-    def __str__(self):
-        print("Estou em:  ", self.position, " e pbest está: ", self.p_best_position)
 
     def move(self):
         self.position = self.position + self.velocity
@@ -188,11 +180,6 @@ class Space:
         else:
             return True
 
-    def print_particles(self):
-        for particle in self.particles:
-            particle.__str__()
-            # print("\n")
-
     # For the local topology #Could be used set_p_best()...
     def set_p_best_l(self):
         for i in range(len(self.groups)):
@@ -311,9 +298,6 @@ class PSO:
 
         # Setting the space of problem
         self.space = Space(self.n_dimensions, self.particles, self.func_name, topology=self.topology)
-
-    # with open('g_best_results.txt', 'a') as file:
-    #    result = file.write('g_best   iteration_n'+"\n")
 
     # Setting the new particles and putting ID
     def set_particles(self):
