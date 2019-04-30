@@ -120,26 +120,12 @@ class Space:
         else:
             self.f_best_value = min(self.all_p_bests)
             position = int(np.where(self.all_p_bests == self.f_best_value)[0])
-
-            bests3 = sorted(self.all_p_bests)
-            mean_bests3 = (bests3[0] + bests3[1] + bests3[2]) / 3
-            self.f_best_value = mean_bests3
-
             self.f_best_position = self.particles[position].p_best_position
 
             # Other option: take the mean of the 3 fist values and define as self.f_best_value
-
-            # bs = ['inf', 'inf', 'inf']
-            # b = self.all_p_bests[0]
-            # i = 0
-            # less = -1
-            # while max(bs) == 'inf':
-            #     for self.x in range(1, len(self.all_p_bests)-1):
-            #         if b > self.all_p_bests[x] and x != less:
-            #             b = self.all_p_bests[x]
-            #     less = self.x
-            #     bs[i] = b
-            #     i += 1
+            # bests3 = sorted(self.all_p_bests)
+            # mean_bests3 = (bests3[0] + bests3[1] + bests3[2]) / 3
+            # self.f_best_value = mean_bests3
 
     def move_particle_f(self, coef_val, clerc: bool, vmax, move_focal: bool):
         r1 = np.random.rand(self.qtd_dimension)
